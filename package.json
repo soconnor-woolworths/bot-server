@@ -5,6 +5,9 @@
   "repository": "https://github.com/soconnor-woolworths/bot-server.git",
   "author": "Pre-render Team: Shaun, Danny, Deepak, Hiren",
   "license": "MIT",
+  "scripts": {
+    "start": "ts-node ./src/index.ts"
+  },
   "dependencies": {
     "express": "^4.18.0"
   },
