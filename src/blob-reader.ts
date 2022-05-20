@@ -27,6 +27,8 @@ export class BlobReader {
     
     console.log("\nDownloaded blob content...");
     console.log(blobContent);
+
+    return blobContent;
   }
 
   private getBlobName(pageUrl: string): string {
