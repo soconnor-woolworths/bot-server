@@ -6,7 +6,8 @@
   "author": "Pre-render Team: Shaun, Danny, Deepak, Hiren",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "NODE_ENV=prod ts-node ./src/index.ts",
+    "local": "NODE_ENV=local ts-node ./src/index.ts"
   },
   "dependencies": {
     "@azure/storage-blob": "12.9.0",
