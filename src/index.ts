@@ -1,13 +1,56 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import { connectMongoDb } from './connect-db';
+import { Mongoose } from 'mongoose';
+import { hashUrl, shouldReadFromBlogStorage } from './utils';
+import { BlobReader } from './blob-reader';
+
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 
 const app = express();
 
-app.get('*', (req, res) => {
-    res.send(`This is a test web page! ${req.url}`);
-    // read look up table
+const blobReader = new BlobReader();
 
-})
+app.get('*', async (req, res) => {
+  const { url } = req;
+  console.log({ url });
 
-app.listen(3000, () => {
-    console.log('The application is listening on port 3000!');
-})
+  const hashedUrl = hashUrl(url);
+  console.log({ hashedUrl });
+
+  const readFromBlob = await shouldReadFromBlogStorage(url);
+  console.log({ readFromBlob });
+
+  if (readFromBlob) {
+    console.log('reading from blob storage');
+    const content = await blobReader.getFromBlobStorage(hashedUrl);
+    res.send(content);
+  } else {
+    res.send('url is either expired or not found in lookup table');
+  }
+});
+
+connectMongoDb()
+  .then((mongoose: Mongoose) => {
+    mongoose.connection.db
+      .listCollections()
+      .toArray(function (err, collections) {
+        if (err) {
+          console.log(err);
+        } else if (collections) {
+          console.log('Available Collections', {
+            collectionNames: collections.map(({ name }) => name),
+          });
+        }
+      });
+    app
+      .listen(3000, () => {
+        console.log('The application is listening on port 3000!');
+      })
+      .on('close', () => mongoose.disconnect());
+  })
+  .catch((err) => {
+    console.error({ err });
+  });
