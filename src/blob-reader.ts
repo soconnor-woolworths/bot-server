@@ -18,17 +18,16 @@ export class BlobReader {
     const containerClient = blobServiceClient.getContainerClient(
       this.containerName
     );
-
+    
     const blobName = this.getBlobName(pageUrl);
     // const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    const blockBlobClient = containerClient.getBlockBlobClient(pageUrl);
+    const blockBlobClient = containerClient.getBlockBlobClient('hxIqoHc+2QTnnfYUbk1CSNl6Zww=');
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
-    const blobContent = await this.streamToText(
-      downloadBlockBlobResponse.readableStreamBody
-    );
-
-    console.log('\nDownloaded blob content...');
+    const blobContent = await this.streamToText(downloadBlockBlobResponse.readableStreamBody);
+    
+    console.log("\nDownloaded blob content...");
     console.log(blobContent);
+
     return blobContent;
   }
 
