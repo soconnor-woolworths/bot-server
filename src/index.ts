@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { connectMongoDb } from './connect-db';
 import { Mongoose } from 'mongoose';
+import { hashUrl, shouldReadFromBlogStorage } from './utils';
+import { BlobReader } from './blob-reader';
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -9,9 +11,25 @@ dotenv.config({
 
 const app = express();
 
-app.get('*', (req, res) => {
-  res.send(`This is a test web page! ${req.url}`);
-  // read look up table
+const blobReader = new BlobReader();
+
+app.get('*', async (req, res) => {
+  const { url } = req;
+  console.log({ url });
+
+  const hashedUrl = hashUrl(url);
+  console.log({ hashedUrl });
+
+  const readFromBlob = await shouldReadFromBlogStorage(url);
+  console.log({ readFromBlob });
+
+  if (readFromBlob) {
+    console.log('reading from blob storage');
+    const content = await blobReader.getFromBlobStorage(hashedUrl);
+    res.send(content);
+  } else {
+    res.send('url is either expired or not found in lookup table');
+  }
 });
 
 connectMongoDb()
