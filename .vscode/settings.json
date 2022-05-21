@@ -20,5 +20,6 @@
     "titleBar.inactiveBackground": "#f8199d99",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#f8199d"
+  "peacock.color": "#f8199d",
+  "cSpell.words": ["upsert"]
 }
