@@ -2,7 +2,6 @@ import { Schema, model, connect } from "mongoose";
 
 interface ILookUpUrl {
   _id: string;
-  hashedUrl: string;
   expiryDate: Date;
   updatedAt: Date;
   createdAt: Date;
