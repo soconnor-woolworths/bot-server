@@ -1,5 +1,4 @@
 import { BlobServiceClient } from '@azure/storage-blob';
-import { hashUrl } from './utils';
 
 export class BlobReader {
   readonly AZURE_STORAGE_CONNECTION_STRING =
@@ -8,7 +7,7 @@ export class BlobReader {
 
   constructor() {}
 
-  public async getFromBlobStorage(pageUrl: string) {
+  public async getFromBlobStorage(hashedUrl: string) {
     if (!this.AZURE_STORAGE_CONNECTION_STRING) {
       throw Error('Azure Storage Connection string not found');
     }
@@ -18,21 +17,17 @@ export class BlobReader {
     const containerClient = blobServiceClient.getContainerClient(
       this.containerName
     );
-    
-    const blobName = this.getBlobName(pageUrl);
-    // const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    const blockBlobClient = containerClient.getBlockBlobClient('hxIqoHc+2QTnnfYUbk1CSNl6Zww=');
+
+    const blockBlobClient = containerClient.getBlockBlobClient(hashedUrl);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
-    const blobContent = await this.streamToText(downloadBlockBlobResponse.readableStreamBody);
-    
-    console.log("\nDownloaded blob content...");
+    const blobContent = await this.streamToText(
+      downloadBlockBlobResponse.readableStreamBody
+    );
+
+    console.log('\nDownloaded blob content...');
     console.log(blobContent);
 
     return blobContent;
-  }
-
-  private getBlobName(pageUrl: string): string {
-    return hashUrl(pageUrl);
   }
 
   // Convert stream to text
