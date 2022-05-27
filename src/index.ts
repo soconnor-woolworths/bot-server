@@ -20,7 +20,7 @@ app.get('*', async (req, res) => {
   const hashedUrl = hashUrl(url);
   console.log({ hashedUrl });
 
-  const readFromBlob = await shouldReadFromBlogStorage(url);
+  const readFromBlob = await shouldReadFromBlogStorage(hashedUrl);
   console.log({ readFromBlob });
 
   if (readFromBlob) {
