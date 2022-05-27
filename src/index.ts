@@ -45,9 +45,10 @@ connectMongoDb()
           });
         }
       });
+    const port = 3000;
     app
-      .listen(3000, () => {
-        console.log('The application is listening on port 3000!');
+      .listen(port, () => {
+        console.log(`The application is listening on http://localhost:${port}`);
       })
       .on('close', () => mongoose.disconnect());
   })
