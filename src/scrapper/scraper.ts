@@ -1,4 +1,4 @@
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { Uploader } from './uploader';
 import { SitemapURLExtract } from './sitemap';
 import { saveOrUpdateLookUpUrl } from './updateLookUpTable';
@@ -15,7 +15,7 @@ export class Scraper {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     console.log('Navigating to ', url);
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 0 });
     console.log('Fetching html....');
     const pageContent = await page.content();
     await page.close();

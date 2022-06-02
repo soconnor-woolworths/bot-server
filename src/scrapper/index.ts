@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import { Mongoose } from 'mongoose';
 import { connectMongoDb } from '../shared/connect-db';
 import { Scraper } from './scraper';

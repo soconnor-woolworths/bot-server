@@ -1,7 +1,8 @@
-import * as configJson from './config.json';
-import * as nodeURL from 'url';
+import nodeURL from 'url';
+import configJson from './config.json';
 
 export const removeParams = (url: string) => {
+  console.log({ configJson });
   const category = url.split('/')[4];
   console.log('Removing params for category: ', category);
   const urlObj = new nodeURL.URL(url);

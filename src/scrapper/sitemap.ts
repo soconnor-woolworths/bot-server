@@ -1,4 +1,4 @@
-import * as xml2js from 'xml2js';
+import xml2js from 'xml2js';
 import { https } from 'follow-redirects';
 import { siteMapURL } from '../shared/ constants';
 
