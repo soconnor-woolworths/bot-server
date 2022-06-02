@@ -10,6 +10,7 @@ import {
 import { BlobReader } from './blob-reader';
 import { Scraper } from './scrapper/scraper';
 import { Uploader } from './scrapper/uploader';
+import path from 'path';
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -18,8 +19,17 @@ dotenv.config({
 const app = express();
 
 const blobReader = new BlobReader();
+app.use('/favicon.ico', async (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
+
+app.get('/', async (req, res) => {
+  console.log('route /');
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.get('*', async (req, res) => {
+  console.log('route *');
   const { url } = req;
   console.log({ url });
   try {
