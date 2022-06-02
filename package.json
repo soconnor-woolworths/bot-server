@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "NODE_ENV=prod ts-node ./src/index.ts",
-    "local": "NODE_ENV=local ts-node ./src/index.ts"
+    "start:local": "NODE_ENV=local ts-node ./src/index.ts",
+    "scrap": "NODE_ENV=prod ts-node ./src/scrapper/index.ts",
+    "scrap:local": "NODE_ENV=local ts-node ./src/scrapper/index.ts"
   },
   "dependencies": {
     "@azure/storage-blob": "12.9.0",
