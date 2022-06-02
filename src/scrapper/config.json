@@ -1,0 +1,6 @@
+[
+  {
+    "category": "discover",
+    "requiredParams": ["name"]
+  }
+]

@@ -1,9 +1,15 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { connectMongoDb } from './connect-db';
+import { connectMongoDb } from './shared/connect-db';
 import { Mongoose } from 'mongoose';
-import { hashUrl, shouldReadFromBlogStorage } from './utils';
+import {
+  getWoolworthsUrl,
+  hashUrl,
+  shouldReadFromBlogStorage,
+} from './shared/utils';
 import { BlobReader } from './blob-reader';
+import { Scraper } from './scrapper/scraper';
+import { Uploader } from './scrapper/uploader';
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -16,19 +22,30 @@ const blobReader = new BlobReader();
 app.get('*', async (req, res) => {
   const { url } = req;
   console.log({ url });
+  try {
+    const woolworthsUrl = getWoolworthsUrl(url);
+    console.log({ woolworthsUrl });
 
-  const hashedUrl = hashUrl(url);
-  console.log({ hashedUrl });
+    const hashedUrl = hashUrl(woolworthsUrl);
+    console.log({ hashedUrl });
 
-  const readFromBlob = await shouldReadFromBlogStorage(hashedUrl);
-  console.log({ readFromBlob });
+    const readFromBlob = await shouldReadFromBlogStorage(hashedUrl);
+    console.log({ readFromBlob });
 
-  if (readFromBlob) {
-    console.log('reading from blob storage');
-    const content = await blobReader.getFromBlobStorage(hashedUrl);
-    res.send(content);
-  } else {
-    res.send('url is either expired or not found in lookup table');
+    if (readFromBlob) {
+      console.log('reading from blob storage');
+      const content = await blobReader.getFromBlobStorage(hashedUrl);
+      res.send(content);
+    } else {
+      const content = await new Scraper(new Uploader()).scrap(woolworthsUrl);
+      if (content) {
+        return res.send(content);
+      }
+      throw new Error('No content received from scapper');
+    }
+  } catch (error) {
+    console.error(`Error responding to ${url}`, error);
+    res.sendStatus(500);
   }
 });
 

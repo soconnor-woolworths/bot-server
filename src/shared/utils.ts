@@ -1,14 +1,9 @@
+import exp from 'constants';
 import { createHash } from 'crypto';
 import { LookUpUrl } from './schema';
 
-export function hashUrl(url: string, baseUrl?: string): string {
-  return createHash('sha1')
-    .update(
-      `${
-        baseUrl || process.env.BASE_URL || 'https://www.woolworths.com.au'
-      }${url}`
-    )
-    .digest('base64');
+export function hashUrl(url: string): string {
+  return createHash('sha1').update(url).digest('base64');
 }
 
 export const shouldReadFromBlogStorage = async (
@@ -22,3 +17,6 @@ export const shouldReadFromBlogStorage = async (
   }
   return false;
 };
+
+export const getWoolworthsUrl = (url: string) =>
+  `${process.env.BASE_URL || 'https://www.woolworths.com.au'}${url}`;
