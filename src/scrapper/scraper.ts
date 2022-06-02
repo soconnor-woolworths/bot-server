@@ -4,6 +4,7 @@ import { SitemapURLExtract } from './sitemap';
 import { saveOrUpdateLookUpUrl } from './updateLookUpTable';
 import { removeParams } from './queryConfig';
 import { hashUrl } from '../shared/utils';
+import { removeScripts } from './jsScrapper';
 
 export class Scraper {
   constructor(private uploader: Uploader) {}
@@ -14,11 +15,18 @@ export class Scraper {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     console.log('Navigating to ', url);
-    await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.goto(url, { waitUntil: 'networkidle2' });
     console.log('Fetching html....');
     const pageContent = await page.content();
+    await page.close();
     browser.close();
-    return pageContent;
+    console.log('page content', { pageContent });
+    console.log('removing scripts');
+    const pageContentWithoutScriptTags = removeScripts(pageContent);
+    console.log('page content without scripts', {
+      pageContentWithoutScriptTags,
+    });
+    return pageContentWithoutScriptTags;
   }
 
   async runner() {
