@@ -17,5 +17,10 @@ export const shouldReadFromBlogStorage = async (
   return false;
 };
 
+export const getAllLookupUrls = async () => {
+  const lookupUrls = await LookUpUrl.find().exec();
+  return lookupUrls;
+};
+
 export const getWoolworthsUrl = (url: string) =>
   `${process.env.BASE_URL || 'https://www.woolworths.com.au'}${url}`;
