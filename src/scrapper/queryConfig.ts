@@ -22,5 +22,5 @@ export const removeParams = (url: string) => {
     urlObj.search = emptyURLParams.toString();
     console.log('URL after deleting the params', urlObj.toString());
   }
-  return urlObj.toString();
+  return urlObj;
 };

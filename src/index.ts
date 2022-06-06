@@ -1,11 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import fs from 'fs';
 import { connectMongoDb } from './shared/connect-db';
 import { Mongoose } from 'mongoose';
 import {
   getWoolworthsUrl,
   hashUrl,
   shouldReadFromBlogStorage,
+  getAllLookupUrls,
 } from './shared/utils';
 import { BlobReader } from './blob-reader';
 import { Scraper } from './scrapper/scraper';
@@ -26,6 +28,31 @@ app.use('/favicon.ico', async (req, res) => {
 app.get('/', async (req, res) => {
   console.log('route /');
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/prerender', async (req, res) => {
+  const lookupUrls: any[] = await getAllLookupUrls();
+  console.log(lookupUrls);
+
+  const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  const style = fs.readFileSync(
+    path.join(__dirname, 'style/style.css'),
+    'utf8'
+  );
+
+  let lookupUrlElement = '';
+  lookupUrls.forEach((lookupUrl) => {
+    console.log(lookupUrl.url);
+    lookupUrlElement += `<li class="item-list"><div><div class="item-url"><a href="${lookupUrl.url}">${lookupUrl.url}</a></div><div class="item-expiry">${lookupUrl.expiryDate}<div><div></li>`;
+  });
+  lookupUrlElement = `<ul class="url-list">${lookupUrlElement}</ul>`;
+
+  res.send(
+    indexHtml.replace(
+      '<!-- content -->',
+      `<style>${style}</style>` + lookupUrlElement
+    )
+  );
 });
 
 app.get('*', async (req, res) => {

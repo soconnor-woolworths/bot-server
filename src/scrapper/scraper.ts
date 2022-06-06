@@ -40,7 +40,9 @@ export class Scraper {
   async scrap(url: string) {
     try {
       console.log('URL before deleting the params: ', url);
-      const scraperUrl = removeParams(url);
+      const cleanUrl = removeParams(url);
+      const scraperUrl = cleanUrl.toString();
+      const scraperPathname = cleanUrl.pathname;
       console.log(scraperUrl);
 
       const pageHtmlContent = await this.getHtmlContent(scraperUrl);
@@ -50,7 +52,7 @@ export class Scraper {
       await this.uploader.uploadFile(hashedFilename, pageHtmlContent);
 
       //Connection to DB and update the record in the table
-      await saveOrUpdateLookUpUrl(hashedFilename);
+      await saveOrUpdateLookUpUrl(hashedFilename, scraperPathname);
       return pageHtmlContent;
     } catch (error) {
       console.error(`Error in processing ${url}\n`, error);
