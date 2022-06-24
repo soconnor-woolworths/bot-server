@@ -43,9 +43,30 @@ app.get('/prerender', async (req, res) => {
   let lookupUrlElement = '';
   lookupUrls.forEach((lookupUrl) => {
     console.log(lookupUrl.url);
-    lookupUrlElement += `<li class="item-list"><div><div class="item-url"><a href="${lookupUrl.url}">${lookupUrl.url}</a></div><div class="item-expiry">${lookupUrl.expiryDate}<div><div></li>`;
+    lookupUrlElement += `
+      <li class="item-list">
+        <div>
+          <div class="item-url">
+            <a href="${lookupUrl.url}">${lookupUrl.url} </a>
+          </div>
+          <span class="quick-view">Quick view <div class="iframe"><iframe src="${lookupUrl.url}"></iframe></div></span>
+          <span class="item-expiry">${lookupUrl.expiryDate}<span>
+        </div>
+      </li>`;
   });
-  lookupUrlElement = `<ul class="url-list">${lookupUrlElement}</ul>`;
+  lookupUrlElement = `
+    <ul class="url-list">
+      <li class="item-list">
+        <div>
+          <div class="item-url">
+            <h3>Prendered file<h3>
+          </div>
+          <div></div>
+          <h3 class="item-expiry-heading">Expiry date</h3>
+        </div>
+      </li>
+      ${lookupUrlElement}
+    </ul>`;
 
   res.send(
     indexHtml.replace(

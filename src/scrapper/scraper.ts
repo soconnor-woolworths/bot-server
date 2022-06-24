@@ -52,6 +52,7 @@ export class Scraper {
       await this.uploader.uploadFile(hashedFilename, pageHtmlContent);
 
       //Connection to DB and update the record in the table
+      console.log('Storing in DB...');
       await saveOrUpdateLookUpUrl(hashedFilename, scraperPathname);
       return pageHtmlContent;
     } catch (error) {

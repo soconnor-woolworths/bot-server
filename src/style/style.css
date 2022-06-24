@@ -1,3 +1,11 @@
+/* CSS Reset */
+*,
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   color: #545454;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -6,6 +14,7 @@ body {
 
 .item-list {
   border-bottom: dotted 1px;
+  list-style-type: none;
   padding: 10px;
 }
 
@@ -14,6 +23,43 @@ body {
   justify-content: space-between;
 }
 
+.item-url {
+  width: 500px;
+}
+
+.item-expiry {
+  flex-grow: 1;
+  text-align: right;
+}
+
 li:nth-child(odd) {
   background: #f2f2f2;
+}
+
+.quick-view {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+  position: relative;
+  padding: 4px;
+  margin-right: 80px;
+}
+.quick-view .iframe {
+  display: none;
+}
+.quick-view:hover .iframe {
+  display: block;
+}
+
+.iframe {
+  position: absolute;
+  border: none;
+  box-shadow: 10px 10px 20px #545454;
+  top: -100px;
+  left: 80px;
+  z-index: 100;
+}
+iframe {
+  width: 800px;
+  height: 500px;
 }
