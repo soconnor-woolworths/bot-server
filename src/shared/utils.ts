@@ -18,7 +18,9 @@ export const shouldReadFromBlogStorage = async (
 };
 
 export const getAllLookupUrls = async () => {
-  const lookupUrls = await LookUpUrl.find().exec();
+  const lookupUrls = await LookUpUrl.find({
+    url: /^((?!\.(png|jpg|jpeg|gif|svg)).)*$/i,
+  }).exec();
   return lookupUrls;
 };
 
